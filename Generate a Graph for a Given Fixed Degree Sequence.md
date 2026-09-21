@@ -1,57 +1,59 @@
-# Ex. No: 17D - Generate a Graph for a Given Fixed Degree Sequence
+# Ex. No: 17E - Topological Sorting of a DAG
 
 ## AIM:
-To write a Python program to generate a graph for a given **fixed degree sequence**.
+To write a Python program to **print topological sorting** of a **Directed Acyclic Graph (DAG)**.
 
 ## ALGORITHM:
 
-**Step 1**: Start the program.
+**Step 1**: Create a graph and add edges to represent relationships between nodes.
 
-**Step 2**: Check if the sum of the degree sequence is even.  
-> (A necessary condition for the sequence to be graphical.)
+**Step 2**: Use a `visited` set to keep track of visited nodes and a **stack** (or list) to record the **order of nodes** after processing.
 
-- If not even, print an error message and exit the program.
+**Step 3**: Perform **DFS** for each unvisited node:
+- Explore all its neighbors.
+- Recursively apply DFS to each unvisited adjacent node.
+- After all neighbors are visited, **push the current node onto the stack**.
 
-**Step 3**: Use the **Havel-Hakimi algorithm** to determine whether a simple graph can be constructed from the sequence, and to generate the graph.
+**Step 4**: After DFS is complete for all nodes, the stack will contain nodes in **reverse order of their completion time**.
 
-**Step 4**: If the graph is successfully created, **visualize it** using a graph drawing function (e.g., `networkx.draw()`).
+**Step 5**: Print the stack in **reverse** to get the **topological order**.
 
-**Step 5**: End the program.
+---
 
 ## PYTHON PROGRAM
 
 ```python
-def printMat(degseq, n):
-    mat=[[0]*n for i in range(n)]
-    
-    for i in range(n):
-	    for j in range(i+1,n):
-	        if(degseq[i]>0 and degseq[j]>0):
-	            degseq[i]-=1
-	            degseq[j]-=1
-	            mat[i][j]=1
-	            mat[j][i]=1
-	            
-    print("      ", end ="")
-    for i in range(n):
-	    print(" ", "(", i, ")", end ="")
-    print()
-    print()
-    for i in range(n):
-    	print("  ", "(", i, ")", end = " ")
-    	for j in range(n):
-    		print("  ", mat[i][j], end = " ")
-    	print()
-degseq=[]
-for i in range(0, 5):
-    ele = int(input())
-    degseq.append(ele)
-n = len(degseq)
-printMat(degseq, n)
+def addEdge(u, v):
+	global adj
+	adj[u].append(v)
+def DFS(v):
+	global visited, departure, time
+	visited[v] = 1
+	for i in adj[v]:
+		if visited[i] == 0:
+			DFS(i)
+	departure[time] = v
+	time += 1
+def topologicalSort():
+    for i in range(V):
+        if visited[i]==0:
+            DFS(i)
+    for i in range(V-1,-1,-1):
+        print(departure[i],end=" ")
+if __name__ == '__main__':
+	V,time, adj, visited, departure = 6, 0, [[] for i in range(7)], [0 for i in range(7)],[-1 for i in range(7)]
+	addEdge(5, 2)
+	addEdge(5, 0)
+	addEdge(4, 0)
+	addEdge(4, 1)
+	addEdge(2, 3)
+	addEdge(3, 1)
+	print("Topological Sort of the given graph is")
+	topologicalSort()
 ```
 
 ## OUTPUT
-<img width="1186" height="337" alt="image" src="https://github.com/user-attachments/assets/646d61e7-7ae8-4f33-9d2d-e7ddc8464bf4" />
+<img width="1183" height="217" alt="image" src="https://github.com/user-attachments/assets/aae50fe2-f413-48d4-a26e-63d28eca324a" />
 
 ## RESULT
-Therefore, the output is the example to write a Python program to generate a graph for a given **fixed degree sequence**.
+Therefore, the output is the example to write a Python program to **print topological sorting** of a **Directed Acyclic Graph (DAG)**.
